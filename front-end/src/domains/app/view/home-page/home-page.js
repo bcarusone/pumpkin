@@ -2,20 +2,14 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
 import loadData from "../../thunks/load-data";
+import updateData from '../../thunks/update-data';
 import { getAppClaims } from "../../selectors";
 
 import styles from './home-page.css';
 
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import { Grid,
-    Paper,
-    Table,
-    TableContainer,
-    TableHead,
-    TableBody,
-    TableRow,
-    Typography } from '@mui/material';
+import { Button, Grid, Paper, Table, TableContainer, TableHead, TableBody, TableRow, Typography, FormControl, Select, MenuItem } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -28,6 +22,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   }));
 
 export default function HomePage() {
+    const [decisions, setDecisions] = useState({});
+
     const dispatch = useDispatch();
     const claims = useSelector(getAppClaims) || {};
 
@@ -37,6 +33,19 @@ export default function HomePage() {
 
     const capitalize = (string) => {
         return string[0].toUpperCase() + string.slice(1);
+    }
+
+    const handleChange = (lineId) => {
+        let updatedDecisions = Object.assign({}, decisions);
+
+        let updatedDecision = !decisions[lineId];
+        updatedDecisions[lineId] = updatedDecision;
+
+        setDecisions(updatedDecisions);
+    }
+
+    const onSave = () => {
+        dispatch(updateData(claims.id, decisions));
     }
 
     return (
@@ -78,6 +87,7 @@ export default function HomePage() {
                                 <TableRow>
                                     <StyledTableCell>Type</StyledTableCell>
                                     <StyledTableCell>Qty</StyledTableCell>
+                                    <StyledTableCell>Decision</StyledTableCell>
                                     <StyledTableCell>Amount Claimed</StyledTableCell>
                                 </TableRow>
                             </TableHead>
@@ -86,6 +96,21 @@ export default function HomePage() {
                                     <TableRow key={index}>
                                         <TableCell align="left">{item.claim_line_item_type}</TableCell>
                                         <TableCell align="left">{item.quantity}</TableCell>
+                                        <TableCell align="left">
+                                            <FormControl fullWidth>
+                                                <Select
+                                                    labelId="decision-select-label"
+                                                    id="decision-select"
+                                                    value={decisions[item.id] === undefined ? false : decisions[item.id]}
+                                                    label="Decision"
+                                                    autoWidth
+                                                    onChange={() => handleChange(item.id)}
+                                                >
+                                                    <MenuItem value={true}>Approved</MenuItem>
+                                                    <MenuItem value={false}>Denied</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </TableCell>
                                         <TableCell align="left">{item.amount_claimed}</TableCell>
                                     </TableRow>
                                 )) : null}
@@ -95,6 +120,11 @@ export default function HomePage() {
                 </Grid>
                 <Grid item md={3}>
                     {/* spacing */}
+                </Grid>
+                <Grid item md={12}>
+                    <Button variant='filled' color='#fee300' onClick={onSave}>
+                        Save
+                    </Button>
                 </Grid>
             </Grid>
         </div>
