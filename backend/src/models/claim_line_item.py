@@ -1,6 +1,6 @@
 import enum
 
-from sqlalchemy import (Column, Enum, ForeignKey, Integer)
+from sqlalchemy import (Column, Enum, ForeignKey, Integer, Boolean)
 from sqlalchemy.orm import relationship
 
 from .base import Base
@@ -18,6 +18,7 @@ class ClaimLineItem(Base, DateTimeMixin, UUIDidMixin):
 
     amount_claimed = Column(Integer, nullable=False)
     quantity = Column(Integer, nullable=False)
+    decision = Column(Boolean, nullable=False)
     claim_line_item_type = Column(Enum(ClaimLineItemTypeEnum), nullable=True)
 
     claim = relationship("Claim", back_populates='line_items')

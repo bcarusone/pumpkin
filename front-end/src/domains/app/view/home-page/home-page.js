@@ -29,6 +29,12 @@ export default function HomePage() {
 
     useEffect(() => {
         dispatch(loadData());
+
+        let decision;
+        claims?.line_items.map((item) => {
+            decision[item.id] = item.decision;
+        });
+        setDecisions(decision);
     }, []);
 
     const capitalize = (string) => {

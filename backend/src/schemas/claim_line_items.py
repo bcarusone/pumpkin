@@ -9,7 +9,7 @@ class ClaimLineItemSchema(BaseModelSchema):
         ordered = True
         transient = True
         model = ClaimLineItem
-        dump_only = ('claim_line_item_type', 'amount_claimed', 'quantity')
+        dump_only = ('id', 'claim_line_item_type', 'amount_claimed', 'decision', 'quantity')
         fields = dump_only
 
     claim_line_item_type = EnumField(ClaimLineItem.ClaimLineItemTypeEnum, by_value=True)
