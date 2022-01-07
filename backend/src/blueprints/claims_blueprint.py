@@ -30,6 +30,19 @@ class NotesView(MethodView):
         return claim
 
 
+@blueprint.route("/<uuid:claim_id>/utilization", methods=['GET'])
+class NotesView(MethodView):
+
+    @blueprint.response(schema=ResponseClaimSchema)
+    def get(self, claim_id):
+        utilization = orm.get_utilization_for_id(claim_id)
+
+        print(utilization, flush=True)
+        if utilization is None:
+            raise HTTPResourceNotFound
+        return utilization
+
+
 @blueprint.route("/<uuid:claim_id>", methods=['POST'])
 class NotesView(MethodView):
 

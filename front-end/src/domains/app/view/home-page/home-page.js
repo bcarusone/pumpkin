@@ -7,9 +7,27 @@ import { getAppClaims } from "../../selectors";
 
 import styles from './home-page.css';
 
-import { styled } from '@mui/material/styles';
+import { styled, createTheme } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import { Button, Grid, Paper, Table, TableContainer, TableHead, TableBody, TableRow, Typography, FormControl, Select, MenuItem } from '@mui/material';
+import { Button, Grid, Paper, Table, TableContainer, TableHead, TableBody, TableRow, Typography, FormControl, Select, MenuItem, Box } from '@mui/material';
+import { ThemeProvider } from '@emotion/react';
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#ff6774'
+        }
+    },
+    components: {
+        MuiButton: {
+          styleOverrides: {
+            root: {
+              color: 'white',
+            },
+          },
+        },
+      },
+})
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -30,8 +48,8 @@ export default function HomePage() {
     useEffect(() => {
         dispatch(loadData());
 
-        let decision;
-        claims?.line_items.map((item) => {
+        let decision = {};
+        claims?.line_items?.map((item) => {
             decision[item.id] = item.decision;
         });
         setDecisions(decision);
@@ -56,16 +74,24 @@ export default function HomePage() {
 
     return (
         <div className={styles.container}>
-            <Grid container spacing={2}>
-                <Grid item className={styles.customer} md={12}>
-                    <Typography>
-                        Customer: Paige Davenport
+            <Grid container spacing={2} justifyContent='center'>
+                <Grid item className={styles.header} md={12}>
+                    <Typography variant='h4'>
+                        <Box fontWeight='bold' flex='inline'>
+                            Customer:
+                        </Box>
+                        Paige Davenport
                     </Typography>
                     <Typography>
-                        PKN690800
+                        <Box fontStyle='italic'>
+                            PKN690800
+                        </Box>
                     </Typography>
                     <Typography>
-                        Claim: {claims.id}
+                        <Box fontWeight='bold' flex='inline'>
+                            Claim:
+                        </Box>
+                        {claims.id}
                     </Typography>
                 </Grid>
                 <Grid item  md={12}>
@@ -84,7 +110,7 @@ export default function HomePage() {
                     {claims.amount_claimed}
                 </Grid>
                 <Grid item md={3}>
-                    {/* spacing */}
+                    {/* Spacing */}
                 </Grid>
                 <Grid item md={6}>
                     <TableContainer component={Paper}>
@@ -125,12 +151,14 @@ export default function HomePage() {
                     </TableContainer>
                 </Grid>
                 <Grid item md={3}>
-                    {/* spacing */}
+                    {/* Spacing */}
                 </Grid>
                 <Grid item md={12}>
-                    <Button variant='filled' color='#fee300' onClick={onSave}>
-                        Save
-                    </Button>
+                    <ThemeProvider theme={theme}>
+                        <Button variant='contained' color='primary' onClick={onSave} className={styles.button}>
+                            Save
+                        </Button>
+                    </ThemeProvider>
                 </Grid>
             </Grid>
         </div>
