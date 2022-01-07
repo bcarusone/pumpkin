@@ -12,6 +12,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { Button, Grid, Paper, Table, TableContainer, TableHead, TableBody, TableRow, Typography, FormControl, Select, MenuItem, Box } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 
+// Create custom theme for styling save button
 const theme = createTheme({
     palette: {
         primary: {
@@ -29,6 +30,7 @@ const theme = createTheme({
       },
 })
 
+// Styled table cell for table header
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: '#808080',
@@ -55,10 +57,19 @@ export default function HomePage() {
         setDecisions(decision);
     }, []);
 
+    /**
+     * Capitalizes the first character of a string
+     * @param {string} string - the string to capitalize
+     * @returns the string with the first character capitalized
+     */
     const capitalize = (string) => {
         return string[0].toUpperCase() + string.slice(1);
     }
 
+    /**
+     * Callback for when the decision for a line item is changed
+     * @param {number} lineId - the id of the line item that was changed
+     */
     const handleChange = (lineId) => {
         let updatedDecisions = Object.assign({}, decisions);
 
@@ -68,6 +79,9 @@ export default function HomePage() {
         setDecisions(updatedDecisions);
     }
 
+    /**
+     * Updates the database with the new data
+     */
     const onSave = () => {
         dispatch(updateData(claims.id, decisions));
     }
