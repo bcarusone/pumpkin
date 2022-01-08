@@ -91,21 +91,13 @@ export default function HomePage() {
             <Grid container spacing={2} justifyContent='center'>
                 <Grid item className={styles.header} md={12}>
                     <Typography variant='h4'>
-                        <Box fontWeight='bold' flex='inline'>
-                            Customer:
-                        </Box>
-                        Paige Davenport
+                        Customer: Paige Davenport
                     </Typography>
                     <Typography>
-                        <Box fontStyle='italic'>
-                            PKN690800
-                        </Box>
+                        PKN690800
                     </Typography>
                     <Typography>
-                        <Box fontWeight='bold' flex='inline'>
-                            Claim:
-                        </Box>
-                        {claims.id}
+                        Claim: {claims.id}
                     </Typography>
                 </Grid>
                 <Grid item  md={12}>
